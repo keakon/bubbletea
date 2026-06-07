@@ -101,6 +101,23 @@ func WithoutRenderer() ProgramOption {
 	}
 }
 
+// WithoutScrollOptimization disables Ultraviolet's hardware scroll-region
+// (DECSTBM) optimization on the cursed renderer. Use this when the target
+// terminal mishandles scroll-region scrolls under specific conditions
+// (for example libghostty during post-focus-restore surface invalidation),
+// leaving stale rows behind. With the optimization off the renderer redraws
+// changed lines in place instead. The cost is a few extra bytes per scroll
+// frame; on local PTYs the impact is negligible.
+//
+// Scroll optimization is already disabled by default on Windows because some
+// terminals there exhibit similar bugs; this option lets programs extend the
+// same carve-out to other hosts they support.
+func WithoutScrollOptimization() ProgramOption {
+	return func(p *Program) {
+		p.disableScrollOptim = true
+	}
+}
+
 // WithFilter supplies an event filter that will be invoked before Bubble Tea
 // processes a tea.Msg. The event filter can return any tea.Msg which will then
 // get handled by Bubble Tea instead of the original event. If the event filter
