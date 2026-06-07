@@ -31,6 +31,7 @@ type cursedRenderer struct {
 	hardTabs      bool // whether to use hard tabs to optimize cursor movements
 	backspace     bool // whether to use backspace to optimize cursor movements
 	mapnl         bool
+	scrollOptim   bool // whether to use Ultraviolet's hardware scroll-region optimization
 	syncdUpdates  bool // whether to use synchronized output mode for updates
 	starting      bool // indicates whether the renderer is starting after being stopped
 }
@@ -44,6 +45,7 @@ func newCursedRenderer(w io.Writer, env []string, width, height int) (s *cursedR
 	s.term = uv.Environ(env).Getenv("TERM")
 	s.width, s.height = width, height // This needs to happen before [cursedRenderer.reset].
 	s.cellbuf = uv.NewScreenBuffer(s.width, s.height)
+	s.scrollOptim = true // default; matches the historical "on except Windows" policy via reset()
 	reset(s)
 	return
 }
@@ -68,6 +70,21 @@ func (s *cursedRenderer) setOptimizations(hardTabs, backspace, mapnl bool) {
 	}
 	s.scr.SetBackspace(s.backspace)
 	s.scr.SetMapNewline(s.mapnl)
+	s.mu.Unlock()
+}
+
+// setScrollOptim toggles Ultraviolet's hardware scroll-region (DECSTBM)
+// optimization. Some terminals mishandle scroll-region scrolls under specific
+// conditions (e.g. libghostty during post-focus-restore surface invalidation),
+// leaving stale rows behind; disabling the optimization makes the renderer
+// redraw changed lines in place instead, at the cost of a few extra bytes per
+// scroll frame.
+func (s *cursedRenderer) setScrollOptim(v bool) {
+	s.mu.Lock()
+	s.scrollOptim = v
+	if s.scr != nil {
+		s.scr.SetScrollOptim(runtime.GOOS != "windows" && v)
+	}
 	s.mu.Unlock()
 }
 
@@ -603,7 +620,7 @@ func reset(s *cursedRenderer) {
 	}
 	scr.SetBackspace(s.backspace)
 	scr.SetMapNewline(s.mapnl)
-	scr.SetScrollOptim(runtime.GOOS != "windows") // disable scroll optimization on Windows due to bugs in some terminals
+	scr.SetScrollOptim(runtime.GOOS != "windows" && s.scrollOptim) // disable scroll optimization on Windows due to bugs in some terminals; also gated by [WithoutScrollOptimization]
 	s.scr = scr
 }
 

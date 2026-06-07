@@ -485,6 +485,11 @@ type Program struct {
 	// UI but still want to take advantage of Bubble Tea's architecture.
 	disableRenderer bool
 
+	// disableScrollOptim disables Ultraviolet's hardware scroll-region
+	// (DECSTBM) optimization on the cursed renderer. See
+	// [WithoutScrollOptimization].
+	disableScrollOptim bool
+
 	// handlers is a list of channels that need to be waited on before the
 	// program can exit.
 	handlers channelHandlers
@@ -1074,6 +1079,9 @@ func (p *Program) Run() (returnModel Model, returnErr error) {
 			// raw mode. See issue #1572.
 			mapNl := runtime.GOOS != "windows" && p.ttyInput == nil
 			r.setOptimizations(p.useHardTabs, p.useBackspace, mapNl)
+			if p.disableScrollOptim {
+				r.setScrollOptim(false)
+			}
 			p.renderer = r
 		}
 	}
