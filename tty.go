@@ -5,8 +5,8 @@ import (
 	"os"
 	"time"
 
-	uv "github.com/charmbracelet/ultraviolet"
 	"github.com/charmbracelet/x/term"
+	uv "github.com/keakon/ultraviolet"
 )
 
 func (p *Program) suspend() {
