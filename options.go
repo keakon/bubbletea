@@ -101,13 +101,10 @@ func WithoutRenderer() ProgramOption {
 	}
 }
 
-// WithoutScrollOptimization disables Ultraviolet's hardware scroll-region
-// (DECSTBM) optimization on the cursed renderer. Use this when the target
-// terminal mishandles scroll-region scrolls under specific conditions
-// (for example libghostty during post-focus-restore surface invalidation),
-// leaving stale rows behind. With the optimization off the renderer redraws
-// changed lines in place instead. The cost is a few extra bytes per scroll
-// frame; on local PTYs the impact is negligible.
+// WithoutScrollOptimization disables Ultraviolet's hardware scroll
+// optimizations on the cursed renderer. With the optimization off the renderer
+// redraws changed lines in place instead. The cost is extra bytes per scroll
+// frame; on local PTYs the impact is usually small.
 //
 // Scroll optimization is already disabled by default on Windows because some
 // terminals there exhibit similar bugs; this option lets programs extend the
@@ -115,6 +112,17 @@ func WithoutRenderer() ProgramOption {
 func WithoutScrollOptimization() ProgramOption {
 	return func(p *Program) {
 		p.disableScrollOptim = true
+	}
+}
+
+// WithoutScrollRegionOptimization disables only Ultraviolet's DECSTBM
+// scroll-region optimization on the cursed renderer while keeping other hard
+// scroll optimizations enabled. Use this when a terminal mishandles bounded
+// scroll regions under specific conditions (for example focus restore), leaving
+// stale rows behind.
+func WithoutScrollRegionOptimization() ProgramOption {
+	return func(p *Program) {
+		p.disableScrollRegionOptim = true
 	}
 }
 

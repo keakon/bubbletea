@@ -44,6 +44,9 @@ func (nilRenderer) writeString(string) (int, error) { return 0, nil }
 // setSyncdUpdates implements the Renderer interface.
 func (n nilRenderer) setSyncdUpdates(bool) {}
 
+// setScrollRegionOptim implements the Renderer interface.
+func (n nilRenderer) setScrollRegionOptim(bool) {}
+
 // setWidthMethod implements the Renderer interface.
 func (n nilRenderer) setWidthMethod(ansi.Method) {}
 
