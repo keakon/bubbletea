@@ -37,6 +37,10 @@ type renderer interface {
 	// setSyncdUpdates sets whether to use synchronized updates.
 	setSyncdUpdates(bool)
 
+	// setScrollRegionOptim sets whether hard scroll optimizations may use
+	// terminal scroll regions.
+	setScrollRegionOptim(bool)
+
 	// setWidthMethod sets the method for calculating the width of the terminal.
 	setWidthMethod(ansi.Method)
 

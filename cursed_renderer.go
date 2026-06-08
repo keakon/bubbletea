@@ -16,24 +16,25 @@ import (
 )
 
 type cursedRenderer struct {
-	w             io.Writer
-	buf           bytes.Buffer // updates buffer to be flushed to [w]
-	scr           *uv.TerminalRenderer
-	cellbuf       uv.ScreenBuffer
-	lastView      *View
-	env           []string
-	term          string // the terminal type $TERM
-	width, height int
-	mu            sync.Mutex
-	profile       colorprofile.Profile
-	logger        uv.Logger
-	view          View
-	hardTabs      bool // whether to use hard tabs to optimize cursor movements
-	backspace     bool // whether to use backspace to optimize cursor movements
-	mapnl         bool
-	scrollOptim   bool // whether to use Ultraviolet's hardware scroll-region optimization
-	syncdUpdates  bool // whether to use synchronized output mode for updates
-	starting      bool // indicates whether the renderer is starting after being stopped
+	w                 io.Writer
+	buf               bytes.Buffer // updates buffer to be flushed to [w]
+	scr               *uv.TerminalRenderer
+	cellbuf           uv.ScreenBuffer
+	lastView          *View
+	env               []string
+	term              string // the terminal type $TERM
+	width, height     int
+	mu                sync.Mutex
+	profile           colorprofile.Profile
+	logger            uv.Logger
+	view              View
+	hardTabs          bool // whether to use hard tabs to optimize cursor movements
+	backspace         bool // whether to use backspace to optimize cursor movements
+	mapnl             bool
+	scrollOptim       bool // whether to use Ultraviolet's hardware scroll optimizations
+	scrollRegionOptim bool // whether hard scroll optimizations may use DECSTBM scroll regions
+	syncdUpdates      bool // whether to use synchronized output mode for updates
+	starting          bool // indicates whether the renderer is starting after being stopped
 }
 
 var _ renderer = &cursedRenderer{}
@@ -46,6 +47,7 @@ func newCursedRenderer(w io.Writer, env []string, width, height int) (s *cursedR
 	s.width, s.height = width, height // This needs to happen before [cursedRenderer.reset].
 	s.cellbuf = uv.NewScreenBuffer(s.width, s.height)
 	s.scrollOptim = true // default; matches the historical "on except Windows" policy via reset()
+	s.scrollRegionOptim = true
 	reset(s)
 	return
 }
@@ -84,6 +86,15 @@ func (s *cursedRenderer) setScrollOptim(v bool) {
 	s.scrollOptim = v
 	if s.scr != nil {
 		s.scr.SetScrollOptim(runtime.GOOS != "windows" && v)
+	}
+	s.mu.Unlock()
+}
+
+func (s *cursedRenderer) setScrollRegionOptim(v bool) {
+	s.mu.Lock()
+	s.scrollRegionOptim = v
+	if s.scr != nil {
+		s.scr.SetScrollRegionOptim(v)
 	}
 	s.mu.Unlock()
 }
@@ -621,6 +632,7 @@ func reset(s *cursedRenderer) {
 	scr.SetBackspace(s.backspace)
 	scr.SetMapNewline(s.mapnl)
 	scr.SetScrollOptim(runtime.GOOS != "windows" && s.scrollOptim) // disable scroll optimization on Windows due to bugs in some terminals; also gated by [WithoutScrollOptimization]
+	scr.SetScrollRegionOptim(s.scrollRegionOptim)
 	s.scr = scr
 }
 
