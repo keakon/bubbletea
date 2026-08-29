@@ -34,6 +34,7 @@ type cursedRenderer struct {
 	scrollOptim       bool // whether to use Ultraviolet's hardware scroll optimizations
 	scrollRegionOptim bool // whether hard scroll optimizations may use DECSTBM scroll regions
 	syncdUpdates      bool // whether to use synchronized output mode for updates
+	unicodeCoreSet    bool // whether mode 2027 was enabled and needs to be reset on close
 	starting          bool // indicates whether the renderer is starting after being stopped
 }
 
@@ -46,6 +47,14 @@ func newCursedRenderer(w io.Writer, env []string, width, height int) (s *cursedR
 	s.term = uv.Environ(env).Getenv("TERM")
 	s.width, s.height = width, height // This needs to happen before [cursedRenderer.reset].
 	s.cellbuf = uv.NewScreenBuffer(s.width, s.height)
+	// Measure the cell grid with grapheme-cluster widths, matching the widths
+	// programs compute with [ansi.GraphemeWidth]: a width-method disagreement
+	// between the program's model and this grid shifts every row that holds an
+	// emoji presentation sequence (e.g. a keycap digit), leaving card
+	// backgrounds short of their right edge. Rows the terminal paints at a
+	// different width than this grid are repainted by the ultraviolet
+	// renderer.
+	s.cellbuf.Method = ansi.GraphemeWidth
 	s.scrollOptim = true // default; matches the historical "on except Windows" policy via reset()
 	s.scrollRegionOptim = true
 	reset(s)
@@ -242,7 +251,7 @@ func (s *cursedRenderer) close() (err error) {
 		}
 	}
 
-	if s.cellbuf.Method == ansi.GraphemeWidth {
+	if s.unicodeCoreSet {
 		// Make sure to turn off Unicode mode (2027)
 		_, _ = s.scr.WriteString(ansi.ResetModeUnicodeCore)
 	}
@@ -722,11 +731,13 @@ func (s *cursedRenderer) setWidthMethod(method ansi.Method) {
 		// Turn on Unicode mode (2027) for accurate grapheme width calculation.
 		// This is needed for proper rendering of wide characters and emojis.
 		_, _ = s.scr.WriteString(ansi.SetModeUnicodeCore)
-	} else if s.cellbuf.Method == ansi.GraphemeWidth {
+		s.unicodeCoreSet = true
+	} else if s.unicodeCoreSet {
 		// Turn off Unicode mode if we're switching away from grapheme width
 		// calculation to avoid issues with some terminals that might still be
 		// in Unicode mode and render characters incorrectly.
 		_, _ = s.scr.WriteString(ansi.ResetModeUnicodeCore)
+		s.unicodeCoreSet = false
 	}
 	s.cellbuf.Method = method
 	s.mu.Unlock()
