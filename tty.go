@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	uv "github.com/charmbracelet/ultraviolet"
+	uv "github.com/keakon/ultraviolet"
 	"github.com/charmbracelet/x/term"
 )
 

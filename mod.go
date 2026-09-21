@@ -1,6 +1,6 @@
 package tea
 
-import uv "github.com/charmbracelet/ultraviolet"
+import uv "github.com/keakon/ultraviolet"
 
 // KeyMod represents modifier keys.
 type KeyMod = uv.KeyMod

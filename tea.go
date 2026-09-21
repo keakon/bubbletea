@@ -29,7 +29,7 @@ import (
 	"time"
 
 	"github.com/charmbracelet/colorprofile"
-	uv "github.com/charmbracelet/ultraviolet"
+	uv "github.com/keakon/ultraviolet"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/charmbracelet/x/term"
 	"github.com/muesli/cancelreader"
