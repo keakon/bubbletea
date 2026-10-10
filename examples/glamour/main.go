@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"charm.land/bubbles/v2/viewport"
-	tea "charm.land/bubbletea/v2"
-	"charm.land/glamour/v2"
-	"charm.land/glamour/v2/styles"
-	"charm.land/lipgloss/v2"
+	"github.com/keakon/bubbles/v2/viewport"
+	tea "github.com/keakon/bubbletea/v2"
+	"github.com/keakon/glamour/v2"
+	"github.com/keakon/glamour/v2/styles"
+	"github.com/keakon/lipgloss/v2"
 )
 
 const content = `

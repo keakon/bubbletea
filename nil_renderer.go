@@ -2,7 +2,7 @@ package tea
 
 import (
 	"github.com/charmbracelet/colorprofile"
-	"github.com/charmbracelet/x/ansi"
+	"github.com/keakon/x/ansi"
 )
 
 // nilRenderer is a no-op renderer. It implements the Renderer interface but

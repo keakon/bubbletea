@@ -33,7 +33,7 @@ import "github.com/charmbracelet/lipgloss"
 
 // After
 import tea "charm.land/bubbletea/v2"
-import "charm.land/lipgloss/v2"
+import "github.com/keakon/lipgloss/v2"
 ```
 
 ## The Big Idea: Declarative Views
@@ -465,7 +465,7 @@ A flat old → new lookup table. Handy for search-and-replace and LLM-assisted m
 | v1 | v2 |
 |---|---|
 | `github.com/charmbracelet/bubbletea` | `charm.land/bubbletea/v2` |
-| `github.com/charmbracelet/lipgloss` | `charm.land/lipgloss/v2` |
+| `github.com/charmbracelet/lipgloss` | `github.com/keakon/lipgloss/v2` |
 
 ### Model Interface
 

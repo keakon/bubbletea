@@ -1,6 +1,6 @@
 package tea
 
-import "github.com/charmbracelet/x/ansi"
+import "github.com/keakon/x/ansi"
 
 // WindowSizeMsg is used to report the terminal size. It's sent to Update once
 // initially and then on every terminal resize.

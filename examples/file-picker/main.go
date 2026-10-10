@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"charm.land/bubbles/v2/filepicker"
-	tea "charm.land/bubbletea/v2"
+	"github.com/keakon/bubbles/v2/filepicker"
+	tea "github.com/keakon/bubbletea/v2"
 )
 
 type model struct {

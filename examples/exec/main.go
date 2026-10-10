@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	tea "charm.land/bubbletea/v2"
+	tea "github.com/keakon/bubbletea/v2"
 )
 
 type editorFinishedMsg struct{ err error }

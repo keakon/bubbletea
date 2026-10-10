@@ -1,7 +1,7 @@
 package tea
 
 import (
-	"github.com/charmbracelet/x/ansi"
+	"github.com/keakon/x/ansi"
 )
 
 // KeyboardEnhancementsMsg is a message that gets sent when the terminal

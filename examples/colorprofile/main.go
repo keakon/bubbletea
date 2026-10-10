@@ -4,9 +4,9 @@ import (
 	"image/color"
 	"log"
 
-	tea "charm.land/bubbletea/v2"
 	"github.com/charmbracelet/colorprofile"
-	"github.com/charmbracelet/x/ansi"
+	tea "github.com/keakon/bubbletea/v2"
+	"github.com/keakon/x/ansi"
 	"github.com/lucasb-eyer/go-colorful"
 )
 

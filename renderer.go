@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/charmbracelet/colorprofile"
-	"github.com/charmbracelet/x/ansi"
+	"github.com/keakon/x/ansi"
 )
 
 const (

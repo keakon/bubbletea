@@ -1,9 +1,9 @@
 package main
 
 import (
-	"charm.land/bubbles/v2/key"
-	"charm.land/bubbles/v2/list"
-	tea "charm.land/bubbletea/v2"
+	"github.com/keakon/bubbles/v2/key"
+	"github.com/keakon/bubbles/v2/list"
+	tea "github.com/keakon/bubbletea/v2"
 )
 
 func newItemDelegate(keys *delegateKeyMap, styles *styles) list.DefaultDelegate {

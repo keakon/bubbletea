@@ -5,10 +5,10 @@ import (
 	"os"
 	"time"
 
-	"charm.land/bubbles/v2/help"
-	"charm.land/bubbles/v2/key"
-	"charm.land/bubbles/v2/stopwatch"
-	tea "charm.land/bubbletea/v2"
+	"github.com/keakon/bubbles/v2/help"
+	"github.com/keakon/bubbles/v2/key"
+	"github.com/keakon/bubbles/v2/stopwatch"
+	tea "github.com/keakon/bubbletea/v2"
 )
 
 type model struct {

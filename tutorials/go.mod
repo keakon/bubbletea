@@ -4,18 +4,18 @@ go 1.24.2
 
 toolchain go1.24.10
 
-require charm.land/bubbletea/v2 v2.0.0-00010101000000-000000000000
+require github.com/keakon/bubbletea/v2 v2.0.9-fork.1
 
 require (
 	github.com/charmbracelet/colorprofile v0.4.1 // indirect
-	github.com/charmbracelet/ultraviolet v0.0.0-20260205113103-524a6607adb8 // indirect
-	github.com/charmbracelet/x/ansi v0.11.6 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
-	github.com/clipperhouse/displaywidth v0.9.0 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.5.0 // indirect
+	github.com/keakon/displaywidth v0.11.0-fork.1 // indirect
+	github.com/keakon/ultraviolet v0.0.1-fork.10 // indirect
+	github.com/keakon/x/ansi v0.11.8-fork.2 // indirect
 	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
 	github.com/mattn/go-runewidth v0.0.19 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
@@ -26,4 +26,4 @@ require (
 	golang.org/x/sys v0.40.0 // indirect
 )
 
-replace charm.land/bubbletea/v2 => ../
+replace github.com/keakon/bubbletea/v2 => ../

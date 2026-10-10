@@ -9,8 +9,8 @@ import (
 	"os"
 	"time"
 
-	"charm.land/bubbles/v2/spinner"
-	tea "charm.land/bubbletea/v2"
+	"github.com/keakon/bubbles/v2/spinner"
+	tea "github.com/keakon/bubbletea/v2"
 )
 
 // A message used to indicate that activity has occurred. In the real world (for
